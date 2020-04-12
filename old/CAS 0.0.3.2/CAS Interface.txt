@@ -1,0 +1,135 @@
+===== CLASS [slightly (totally) obsolete] =====
+
+// Class variables
+
+// Instance variables
+ArrayList<Expr> array; [Expr]
+ArrayList<Expr> args; [Function]
+int[] derivatives; [Function]
+
+// Constructors
+
+// Basic operations, will always return simplified result
+Expr simplify(); [Expr]
+Expr simplifyExpr(); [Expr*]
+Expr simplifyFunction(); [Function*]
+Expr simplifyAssociativeFunction(); [AssociativeFunction~]
+Expr expand(); [Number?]
+Expr derivative(Variable); [Expr*]
+Expr derivativePartial(int); [Function*]
+Expr antiderivative(Variable); [Expr*]
+Expr integrate(Variable, Expr, Expr); [Expr]
+// Except for these fellows
+Expr negative(); [Expr]
+Expr inverse(); [Expr]
+Expr square(); [Expr]
+Expr cube(); [Expr]
+**Expr conjugate();
+
+// Utility, assume simplified Exprs
+Compare compare(Expr); [Expr*]
+boolean equalTo(Expr); [Expr]
+Compare _equalTo(Expr); [Expr]
+Compare notEqualTo(Expr); [Expr]
+Compare lessThan(Expr); [Expr]
+Compare greaterThan(Expr); [Expr]
+Compare lessThanOrEqualTo(Expr); [Expr]
+Compare greaterThanOrEqualTo(Expr); [Expr]
+Compare isZero(); [Expr*]
+Compare isPositive(); [Expr*]
+Compare isNegative(); [Expr*]
+Compare isReal(); [Expr*]
+Compare isImaginary(); [Expr*]
+Compare isComplex(); [Expr]
+**boolean isMultipleOfPi();
+
+// Interface
+String toString(); [Expr*]
+int hashCode(); [Expr~]
+boolean equals(Object); [Expr~]
+
+// Getters and setters (access Number fields directly)
+int getMinimumArguments(); [Function*]
+int getMaximumArguments(); [Function*]
+DualFunction getDualFunction(); [AssociativeFunction*]
+Expr getLeft(); [DoubleArgumentFunction]
+Expr getRight(); [DoubleArgumentFunction]
+Expr getBase(); [DualExponentiation, LogBase]
+Expr getPower(); [DualExponentiation]
+Expr getArgument(); [LogBase, SingleArgumentFunction]
+
+===== SIMPLIFICATION =====
+
+EquivalenceClass expand() - manager; calls expandExpr & transform
+void expandExpr() - subclass for adding extra Exprs to eqclass
+IEquivalenceClass transform() - calls transformExpr() - never know when I might need extra global logic
+IEquivalenceClass transformExpr() - simply returns an alternate Expr or group of Exprs (eqclass)
+
+===== NUMBER STRUCTURE =====
+
+Complex/Imaginary
+NumberSum
+Multiple
+Exponent
+Fraction
+Integer/Transcendental/FunctionConstant
+[ NumIntegerTranscendentalFunctionConstant ]
+
+===== CLASS HIERARCHY =====
+
+Applet, Util, Compare, Transcendent
+
+Expr
+	Function
+-  √		ArgumentContainer
+   √		AssociativeFunction
+-  √			Product (has-a DualProduct)
+-  √			Sum (has-a DualSum)
+   √		DoubleArgumentFunction
+-  √			ArcTan2
+-  √			ComplexExpr
+-  √			Difference
+   √			DualFunction
+-  √ *				DualExponentiation
+-  √ *				DualProduct
+-  √ *				DualSum
+-  √ *			LogBase
+-  √ *			Quotient
+   √		PartiallyAssociativeFunction
+-  √			Exponentiation
+   √		SingleArgumentFunction
+-  √			Arg
+-  √			ArcCos
+-  √			ArcSin
+-  √			ArcTan
+-  √			Cis
+-  √			Cos
+-  √ *			Exp
+-  √			Im
+-  √			ImaginaryExpr
+-  √ *			Inverse
+-  √ *			Log
+-  √ *			Log10
+-  √			Negative
+-  √			Re
+-  √			Sin
+-  √			Sgn
+-  √ *			Sqrt
+-  √			Tan
+   	Number
+-  √		Complex
+-  √		Exponent
+-  √		Fraction
+-  √		FunctionConstant
+-  √		Imaginary
+-  √		Integer
+-  √		Multiple
+-  √		NumberSum
+-  √		Transcendental
+-  √	PolynomialTerm
+-  √	Variable
+
+* expand method for Numbers (if necessary)
+* FunctionConstant cannot be unboxed, i.e. Exp[Log'[2]] ≠ x if Log'[2] denotes a FunctionConstant(Log[Integer[2]]).
+* Add compare() implementations
+* Sum factoring
